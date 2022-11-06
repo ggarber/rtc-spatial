@@ -1,0 +1,25 @@
+{
+  "name": "rtc-spatial",
+  "version": "0.0.1",
+  "license": "MIT",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "webpack",
+    "pretty": "eslint src --fix && prettier src --write",
+    "demo": "http-server"
+  },
+  "devDependencies": {
+    "eslint": "^7.32.0",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-jest": "^26.1.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.2.0",
+    "http-server": "^14.1.1",
+    "jest": "^27.5.1",
+    "prettier": "^2.5.1",
+    "standardized-audio-context-mock": "^9.6.5",
+    "webpack": "^5.38.1",
+    "webpack-cli": "^4.7.2"
+  }
+}

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Spatial audio demo page</title>
+    <style>
+    </style>
+  </head>
+
+  <body>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+    <button id="start-button">Start</button>
+    <button id="add-button">Add participant</button>
+    <!--
+    <button id="remove-audio-button" onclick="remove(document.getElementsByTagName('audio')[0])">Remove audio</button>
+    <button id="remove-video-button" onclick="remove(document.getElementsByTagName('video')[0])">Remove video</button>
+    -->
+    <script type="module">
+        import { start } from '../src/index.js';
+        const add = async () => {
+            const id = Math.random().toString(36).substring(7);
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: true,
+                audio: true
+            });
+            const pc1 = new RTCPeerConnection();
+            const pc2 = new RTCPeerConnection();
+            
+            pc2.ontrack = (event) => {
+                const { track } = event
+                if (track.kind === 'video') {
+                    const element = document.createElement("video");
+                    element.id = `video-${id}`;
+                    element.classList = [ 'draggable' ];
+                    element.width = 640;
+                    element.height = 480;
+                    element.autoplay = true;
+                    element.srcObject = new MediaStream([track]);
+                    document.body.appendChild(element);
+                    $(element).draggable();
+                }
+                else if (track.kind === 'audio') {
+                    const element = document.createElement("audio");
+                    element.id = `audio-${id}`;
+                    element.autoplay = true;
+                    element.srcObject = new MediaStream([track]);
+                    document.body.appendChild(element);
+                }
+            };
+            pc1.onicecandidate = (event) => {
+                pc2.addIceCandidate(event.candidate);
+            };
+            pc2 .onicecandidate = (event) => {
+                pc1.addIceCandidate(event.candidate);
+            };
+
+            pc1.addTrack(stream.getAudioTracks()[0], stream);
+            pc1.addTrack(stream.getVideoTracks()[0], stream);
+            const offer = await pc1.createOffer();
+            await pc1.setLocalDescription(offer);
+            await pc2.setRemoteDescription(offer);
+            const answer = await pc2.createAnswer();
+            await pc2.setLocalDescription(answer);
+            await pc1.setRemoteDescription(answer);
+        };
+        const remove = (element) => {
+            element.parentNode.removeChild(element);
+        };
+        document.getElementById('add-button').onclick = () => {
+            add();
+        };
+        document.getElementById('start-button').onclick = () => {
+            start({ log: true, audioMapper: (audio) => audio.id.split('-')[1], videoMapper: (video) => video.id.split('-')[1] });
+        };
+    </script>
+  </body>
+</html>
