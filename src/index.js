@@ -109,7 +109,7 @@ export const start = async (options) => {
     initializeSpatialization(videoElement);
     let spatialized = spatializedStreams.get(participantId);
     if (!spatialized) {
-      log('new spatialized stream', participantId);
+      log('created spatialized stream', participantId);
       spatialized = {};
       spatializedStreams.set(participantId, spatialized);
     }
@@ -146,7 +146,7 @@ export const start = async (options) => {
     initializeSpatialization(audioElement);
     let spatialized = spatializedStreams.get(participantId);
     if (!spatialized) {
-      log('new spatialized stream', participantId);
+      log('created spatialized stream', participantId);
       spatialized = {};
       spatializedStreams.set(participantId, spatialized);
     }
@@ -168,6 +168,7 @@ export const start = async (options) => {
     if (spatialized && spatialized.videoElement === videoElement) {
       delete spatialized.videoElement;
       if (!spatialized.audioElement) {
+        log('destroyed spatialized stream', participantId);
         spatializedStreams.delete(participantId);
       }
     }
@@ -182,6 +183,7 @@ export const start = async (options) => {
     if (spatialized && spatialized.audioElement === audioElement) {
       delete spatialized.audioElement;
       if (!spatialized.videoElement) {
+        log('destroyed spatialized stream', participantId);
         spatializedStreams.delete(participantId);
       }
     }
@@ -192,7 +194,7 @@ export const start = async (options) => {
       videoHandler(node);
     } else if (node.tagName === 'AUDIO') {
       audioHandler(node);
-    } else {
+    } else if (node.querySelector) {
       const video = node.querySelector('video');
       if (video) {
         videoHandler(video);
