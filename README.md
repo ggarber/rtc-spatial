@@ -1,10 +1,10 @@
 # RTC SPATIAL
 
-Library to spatialize audio signals for audio and video real time communications.  The library makes use of the exising StereoPanner audio APIs in most of the browsers.
+Library to spatialize audio signals for audio and video real time communications.  The library makes use of the exising StereoPanner audio API available in most of the browsers.
 
-To learn more about audio spatialization you can read this Unreal Engine document: xxx
+To learn more about audio spatialization you can read this Unreal Engine document: https://docs.unrealengine.com/5.0/en-US/spatialization-overview-in-unreal-engine/
 
-To learn more about the SterePannerl you can check the MDN documentation: xxx
+To learn more about the SterePanner you can check the MDN documentation: https://developer.mozilla.org/en-US/docs/Web/API/StereoPannerNode
 
 It has been only tested with Chrome but should work in other browsers too.
 
@@ -18,9 +18,11 @@ npm install rtc-spatial
 
 ## How to spatialize audio streams
 
-There are two ways you can use this library, the automatic mode provides a very easy way to integrate it without having to modify the application and the manual mode provides a more flexible and efficient way to do it. 
+There are two ways you can use this library, the automatic mode provides a very easy way to integrate it without having to modify the application and the manual mode provides a more flexible and efficient way to do it.
 
-The automatic mode detects automatically the audio and video elements in the page and spatialize their attached streams when their position changes.
+Given how simple the code in this library is there is a third option consisting on copying the code to your application or just use it for inspiration when implementing it inside your application :)
+
+The automatic mode detects automatically the audio and video elements in the page and spatialize their attached streams when the position of those video elements change.
 
 The manual mode provides an API to map a specific audio stream to a spatialized version of it and provides the panner associated to that stream so that the application can control the panning based on the position of the elements or other application logic. 
 
